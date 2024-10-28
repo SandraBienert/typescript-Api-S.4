@@ -2,35 +2,40 @@
     margin: 0;
     padding: 10px;
     box-sizing: border-box;
+    
+}
+
+.container-principal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .container{
-    width: 60%;
-    height: 300px;
-    border: black 2px solid;
-    margin-left: 20%;
-}
-.row{
+    background-image: url(../css/img/istockphoto-1160791767-1024x1024.jpg);
+    width: 100%;
+    height: 730px;
+    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    align-self: right;
 }
 
-.acuditContainer{
-    border: 2px solid black;
+.joke-container{
+    background-color: beige;
+    width: 30%;   
+    margin-left: 20%; 
+    text-align: center;
 }
 
-.button{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-#button{
-    width: 150px;
-    height: 50px;
+#joke{
+    margin-top: 5%;
+    padding-bottom: 10%;
+}
+#nextJoke{
     background-color: darkblue;
-    color:cornflowerblue;
-    
+    color: cornflowerblue;
 }
+
