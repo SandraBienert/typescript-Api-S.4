@@ -1,41 +1,38 @@
 *{  
     margin: 0;
-    padding: 10px;
+    padding: 5px;
     box-sizing: border-box;
-    
+    max-width: 1024px;
 }
 
-.container-principal{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.container{
+#backgroundContainer{
     background-image: url(../css/img/istockphoto-1160791767-1024x1024.jpg);
     width: 100%;
-    height: 730px;
     background-repeat: no-repeat;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: right;
+    background-size: contain;
+    height: 750px;
 }
 
-.joke-container{
+#jokeContainer{
     background-color: beige;
-    width: 30%;   
-    margin-left: 20%; 
     text-align: center;
+    margin-right: 5%;
+    width: 30%;
 }
 
-
-#joke{
-    margin-top: 5%;
-    padding-bottom: 10%;
-}
-#nextJoke{
-    background-color: darkblue;
-    color: cornflowerblue;
+.form-check-inline{
+    display: flex;
+    justify-content: center;
 }
 
+i.bi.bi-emoji-frown, 
+i.bi.bi-emoji-smile,
+i.bi.bi-emoji-heart-eyes{
+    color: black;
+    background-color: yellow;
+   
+}
+
+button.btn.btn-info{
+    margin: 10px;
+}

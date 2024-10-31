@@ -1,38 +1,71 @@
+const button = document.querySelector('#nextJoke') as HTMLButtonElement | null;
+const jokeContainer = document.getElementById('joke') as HTMLElement | null;
 
 
-// Definim una funció per obtenir un acudit
 async function fetchJoke(): Promise<void> {
-    const response = await fetch('https://icanhazdadjoke.com/', {
-        headers: {
-            'Accept': 'application/json'
+    try {
+        const response = await fetch('https://icanhazdadjoke.com/', {
+            headers: { 'Accept': 'application/json' }
+        });
+
+        if (!response.ok) {
+            console.error('Error en obtenir l\'acudit:', response.statusText);
+            return;
         }
-    });
 
-    if (!response.ok) {
-        console.error('Error al obtenir l\'acudit:', response.statusText);
-        return;
-    }
-
-    const jokeData = await response.json();
-    const jokeElement = document.getElementById('joke');
-
-    if (jokeElement) {
-        jokeElement.textContent = jokeData.joke;
-        console.log('Acudit:', jokeData.joke);
+        const jokeData = await response.json();
+        if (jokeContainer) {
+            jokeContainer.textContent = jokeData.joke;
+            console.log('Acudit rebut i mostrat:', jokeData.joke);
+        }
+    } catch (error) {
+        console.error("Error de red al obtenir l'acudit:", error);
     }
 }
 
-// Funció per gestionar el clic del botó
+
+let reportAcudits: { joke: string; score: number; date: string }[] = [];
+console.log("Inicialització de reportAcudits:", reportAcudits);
+
+function votaAcudit(joke: string) {
+    console.log("Funció votaAcudit crida amb l'acudit:", joke);
+
+    const selectedEmoji = document.querySelector('input[name="inlineRadioOptions"]:checked') as HTMLInputElement;
+    const score = selectedEmoji ? parseInt(selectedEmoji.value) : 0;
+
+    const acudit = {
+        joke: joke,
+        score: score,
+        date: new Date().toISOString()
+    };
+
+    reportAcudits.push(acudit);
+    console.log("Array reportAcudits actualizada:", reportAcudits);
+}
+
+
+function newJoke() {
+    if (jokeContainer?.innerText) {
+        console.log("Funció newJoke. Acudit actual:", jokeContainer.innerText);
+        votaAcudit(jokeContainer.innerText);
+    }
+}
+
 function setupButtonListener(): void {
-    const button = document.getElementById('nextJoke');
     if (button) {
-        button.addEventListener('click', fetchJoke);
+        button.removeEventListener('click', handleClick); 
+        button.addEventListener('click', handleClick);
     }
 }
 
-// Inicialitzem l'aplicació carregant el primer acudit
-window.onload = () => {
-    fetchJoke();
-    setupButtonListener();
-};
-    
+
+function handleClick() {
+    newJoke();  
+    fetchJoke();  
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchJoke();  
+    setupButtonListener();  
+});
