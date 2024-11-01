@@ -69,3 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchJoke();  
     setupButtonListener();  
 });
+
+
+
+
+
