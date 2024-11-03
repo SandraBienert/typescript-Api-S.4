@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
    
-    "target": "es6",                                  
-    "module": "commonjs",                                /* Specify what module code is generated. */
-   
+    "target": "ES6",
+     "lib": [
+      "ES6",
+      "DOM"
+    ],                            
+    "module": "commonjs",                                
     "esModuleInterop": true,                            
-    
-    "strict": true,                                      /* Enable all strict type-checking options. */
- 
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "strict": true,                                      
+    "skipLibCheck": true                                 
   }
 }

@@ -8,60 +8,75 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const button = document.querySelector('#nextJoke');
-const jokeContainer = document.getElementById('joke');
-function fetchJoke() {
+let jokes = [];
+let currentJokeIndex = 0;
+let reportAcudits = [];
+// Funció per obtenir acudits d'ambdues APIs
+function fetchJokes() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const response = yield fetch('https://icanhazdadjoke.com/', {
+            const response1 = yield fetch('https://icanhazdadjoke.com/', {
                 headers: { 'Accept': 'application/json' }
             });
-            if (!response.ok) {
-                console.error('Error en obtenir l\'acudit:', response.statusText);
-                return;
+            if (!response1.ok) {
+                throw new Error("Error al carregar els acudits de l'API 1.");
             }
-            const jokeData = yield response.json();
-            if (jokeContainer) {
-                jokeContainer.textContent = jokeData.joke;
-                console.log('Acudit rebut i mostrat:', jokeData.joke);
+            const joke1 = yield response1.json();
+            const response2 = yield fetch('https://v2.jokeapi.dev/joke/Any?lang=es');
+            if (!response2.ok) {
+                throw new Error("Error al carregar els acudits de l'API 2.");
             }
+            const joke2 = yield response2.json();
+            jokes = [
+                joke1.joke,
+                joke2.joke || `${joke2.setup} ${joke2.delivery}`
+            ];
+            currentJokeIndex = 0;
+            displayJoke();
         }
         catch (error) {
-            console.error("Error de red al obtenir l'acudit:", error);
+            console.error(error);
+            const jokeContainer = document.getElementById("joke");
+            jokeContainer.innerText = "No s'ha pogut carregar cap acudit. Si us plau, torna a intentar-ho.";
         }
     });
 }
-let reportAcudits = [];
-console.log("Inicialització de reportAcudits:", reportAcudits);
-function votaAcudit(joke) {
-    console.log("Funció votaAcudit crida amb l'acudit:", joke);
-    const selectedEmoji = document.querySelector('input[name="inlineRadioOptions"]:checked');
-    const score = selectedEmoji ? parseInt(selectedEmoji.value) : 0;
-    const acudit = {
-        joke: joke,
-        score: score,
-        date: new Date().toISOString()
-    };
-    reportAcudits.push(acudit);
-    console.log("Array reportAcudits actualizada:", reportAcudits);
-}
-function newJoke() {
-    if (jokeContainer === null || jokeContainer === void 0 ? void 0 : jokeContainer.innerText) {
-        console.log("Funció newJoke. Acudit actual:", jokeContainer.innerText);
-        votaAcudit(jokeContainer.innerText);
+// Funció per mostrar l'acudit actual
+function displayJoke() {
+    const jokeContainer = document.getElementById("joke");
+    if (jokes.length > 0) {
+        jokeContainer.innerText = jokes[currentJokeIndex];
     }
 }
-function setupButtonListener() {
-    if (button) {
-        button.removeEventListener('click', handleClick);
-        button.addEventListener('click', handleClick);
+// Funció per gestionar la votació
+function voteJoke(score) {
+    if (jokes.length > 0) {
+        const joke = jokes[currentJokeIndex];
+        reportAcudits.push({
+            joke: joke,
+            score: score,
+            date: new Date().toISOString()
+        });
+        console.log(reportAcudits);
     }
 }
-function handleClick() {
-    newJoke();
-    fetchJoke();
-}
-document.addEventListener('DOMContentLoaded', () => {
-    fetchJoke();
-    setupButtonListener();
+document.addEventListener("DOMContentLoaded", () => {
+    const nextJokeButton = document.getElementById("nextJoke");
+    // Manejador del botó "Següent acudit"
+    nextJokeButton.addEventListener("click", () => {
+        if (jokes.length > 0) {
+            currentJokeIndex = (currentJokeIndex + 1) % jokes.length;
+            displayJoke();
+        }
+    });
+    // Manejador dels botons de radio per votar
+    const radioButtons = document.querySelectorAll('input[name="inlineRadioOptions"]');
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', (event) => {
+            const score = parseInt(event.target.value, 10);
+            voteJoke(score);
+        });
+    });
+    // Càrrega inicial de acudits
+    fetchJokes();
 });
