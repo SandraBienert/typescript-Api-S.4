@@ -14,9 +14,9 @@
 }
 
 #jokeContainer{
-    background-color: beige;
+    background-color: rgb(13, 189, 189);
     text-align: center;
-    margin-right: 5%;
+    margin-right: 2%;
     width: 30%;
 }
 
@@ -35,4 +35,5 @@ i.bi.bi-emoji-heart-eyes{
 
 button.btn.btn-info{
     margin: 10px;
+    background-color: yellow;
 }
